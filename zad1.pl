@@ -75,11 +75,20 @@ match_arg_lists(ArgList1,ArgList2,BindingsIn,BindingsOut) .
 % rule(P, [Q1, Q2, ... Qn]) - budowana regu³a
 % variables ( <lista symboli>) - zmienne wyra¿eñ predykatowych Qx
 
+% ostatni krok rekurencji - nie ma argumentów do z³¹czenia, zwróæ listê
+% wejœciow¹
 match_arg_lists([], [], BindingsIn, BindingsOut) :-
 BindingsOut = BindingsIn.
 
+%zwróæ w BindingsOut listê zwi¹zañ binding(zmienna, wartoœæ)
+%Arg1|RestList1 - lista zmiennych jakiegoœ Qx, np. Q1(X, Y)
+%Arg2|RestList2 - lista wartoœci z jakiegoœ faktu, np.
+%brat(Alfred, Alojzy)
+%spróbuj stworzyæ listê [binding(X, Alfred), binding(Y, Alojzy)]
 match_arg_lists(Arg1|RestList1, Arg2|RestList2, BindingsIn, BindingsOut) :-
+%spróbuj po³¹czyæ pierwsz¹ zmienn¹ i pierwsz¹ wartoœæ
 match_args(Arg1, Arg2, BindingsIn, BindingsOut),
+%wykonaj procedurê dla reszty listy
 match_arg_lists(RestList1, RestList2, BindingsIn, BindingsOut).
 
 % Sprawdza dopasowanie pary argumentów
