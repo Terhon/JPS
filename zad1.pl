@@ -71,3 +71,34 @@ functor(Fact,Functor,N),
 Expr =.. [_|ArgList1],
 Fact =.. [_|ArgList2],
 match_arg_lists(ArgList1,ArgList2,BindingsIn,BindingsOut) .
+
+match_arg_lists([], [], BindingsIn, BindingsOut) :-
+BindingsOut = BindingsIn.
+
+match_arg_lists(Arg1|RestList1, Arg2|RestList2, BindingsIn, BindingsOut) :-
+match_args(Arg1, Arg2, BindingsIn, BindingsOut),
+match_arg_lists(RestList1, RestList2, BindingsIn, BindingsOut).
+
+match_args(Arg1, Arg2, BindingsIn, BindingsOut) :-
+not(( member(binding(Arg1, Arg), BindingsIn), Arg \= Arg2)),
+Arg1 = Arg2,
+append((BindingsIn, binding(Arg1, Arg2), BindingsOut)).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
