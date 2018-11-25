@@ -72,9 +72,6 @@ Expr =.. [_|ArgList1],
 Fact =.. [_|ArgList2],
 match_arg_lists(ArgList1,ArgList2,BindingsIn,BindingsOut) .
 
-% rule(P, [Q1, Q2, ... Qn]) - budowana regu³a
-% variables ( <lista symboli>) - zmienne wyra¿eñ predykatowych Qx
-
 match_arg_lists([], [], BindingsIn, BindingsOut) :-
 BindingsOut = BindingsIn.
 
@@ -82,24 +79,9 @@ match_arg_lists(Arg1|RestList1, Arg2|RestList2, BindingsIn, BindingsOut) :-
 match_args(Arg1, Arg2, BindingsIn, BindingsOut),
 match_arg_lists(RestList1, RestList2, BindingsIn, BindingsOut).
 
-% Sprawdza dopasowanie pary argumentów
-% --
-% zmiennej z wyra¿enia predykatowego z poprzednika regu³y i
-% symbolu z faktu operacyjnego. W przypadku powodzenia jako wynik zwraca
-% uzupe³nion¹ listê zwi¹zañ zmiennych.
-% Arg1 - zmienna wyra¿enia Qx, np. Q1(X, Y)
-% Arg2 - symbol faktu operacyjnego - wartoœæ wziêta z faktu, np. wartoœæ
-% 'Alfred' wziêta z faktu brat(Alfred, Alojzy)
-% procedura próbuje zostawiæ w BindingsOut po³¹czenie BindingsIn z
-% binding(X, 'Alfred')
 match_args(Arg1, Arg2, BindingsIn, BindingsOut) :-
-% sprawdŸ, czy w BindingsIn X nie jest po³¹czone z innym symbolem, ni¿
-% 'Alfred'
 not(( member(binding(Arg1, Arg), BindingsIn), Arg \= Arg2)),
-% spróbuj przypisaæ X = 'Alfred' //czy tak powinno byæ wgl?
 Arg1 = Arg2,
-% dodaj nowy binding //czy 'binding' powinno byæ gdzieœ zdefiniowane
-% wczesniej?
 append((BindingsIn, binding(Arg1, Arg2), BindingsOut)).
 
 
