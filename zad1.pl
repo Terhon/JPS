@@ -102,13 +102,11 @@ match_arg_lists(RestList1, RestList2, BindingsIn, BindingsOut).
 % procedura próbuje zostawiæ w BindingsOut po³¹czenie BindingsIn z
 % binding(X, 'Alfred')
 match_args(Arg1, Arg2, BindingsIn, BindingsOut) :-
-% sprawdŸ, czy w BindingsIn X nie jest po³¹czone z innym symbolem, ni¿
-% 'Alfred'
-not(( member(binding(Arg1, Arg), BindingsIn), Arg \= Arg2)),
-% spróbuj przypisaæ X = 'Alfred' //czy tak powinno byæ wgl?
-Arg1 = Arg2,
-% dodaj nowy binding //czy 'binding' powinno byæ gdzieœ zdefiniowane
-% wczesniej?
+% sprawdŸ, czy w BindingsIn wartosc Alfrednie jest po³¹czone z innym
+% symbolem, ni¿ X i dane przypisanie juz nie istnieje
+not(( member(binding(Arg, Arg2), BindingsIn), Arg \= Arg1)),
+not( member(binding(Arg1, Arg2), BindingsIn)),
+% dodaj nowy binding
 append(BindingsIn, binding(Arg1, Arg2), BindingsOut).
 
 
