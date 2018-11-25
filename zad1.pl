@@ -109,7 +109,7 @@ not(( member(binding(Arg1, Arg), BindingsIn), Arg \= Arg2)),
 Arg1 = Arg2,
 % dodaj nowy binding //czy 'binding' powinno byæ gdzieœ zdefiniowane
 % wczesniej?
-append((BindingsIn, binding(Arg1, Arg2), BindingsOut)).
+append(BindingsIn, binding(Arg1, Arg2), BindingsOut).
 
 
 
