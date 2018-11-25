@@ -85,9 +85,10 @@ BindingsOut = BindingsIn.
 %Arg2|RestList2 - lista wartoœci z jakiegoœ faktu, np.
 %brat(Alfred, Alojzy)
 %spróbuj stworzyæ listê [binding(X, Alfred), binding(Y, Alojzy)]
-match_arg_lists(Arg1|RestList1, Arg2|RestList2, BindingsIn, BindingsOut) :-
+match_arg_lists([Arg1|RestList1],[Arg2|RestList2], BindingsIn, BindingsOut) :-
 %spróbuj po³¹czyæ pierwsz¹ zmienn¹ i pierwsz¹ wartoœæ
 match_args(Arg1, Arg2, BindingsIn, BindingsOut1),
+print(BindingsOut1),
 %wykonaj procedurê dla reszty listy
 match_arg_lists(RestList1, RestList2, BindingsOut1, BindingsOut).
 
@@ -104,8 +105,9 @@ match_arg_lists(RestList1, RestList2, BindingsOut1, BindingsOut).
 match_args(Arg1, Arg2, BindingsIn, BindingsOut) :-
 % sprawdŸ, czy w BindingsIn wartosc Alfrednie jest po³¹czone z innym
 % symbolem, ni¿ X i dane przypisanie juz nie istnieje
+
+not(( member(binding(Arg1, Arg2), BindingsIn))),
 not(( member(binding(Arg, Arg2), BindingsIn), Arg \= Arg1)),
-not( member(binding(Arg1, Arg2), BindingsIn)),
 % dodaj nowy binding
 append(BindingsIn, binding(Arg1, Arg2), BindingsOut).
 
