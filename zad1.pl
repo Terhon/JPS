@@ -88,7 +88,6 @@ BindingsOut = BindingsIn.
 match_arg_lists([Arg1|RestList1],[Arg2|RestList2], BindingsIn, BindingsOut) :-
 %spróbuj po³¹czyæ pierwsz¹ zmienn¹ i pierwsz¹ wartoœæ
 match_args(Arg1, Arg2, BindingsIn, BindingsOut1),
-print(BindingsOut1),
 %wykonaj procedurê dla reszty listy
 match_arg_lists(RestList1, RestList2, BindingsOut1, BindingsOut).
 
@@ -109,7 +108,7 @@ match_args(Arg1, Arg2, BindingsIn, BindingsOut) :-
 not(( member(binding(Arg1, Arg), BindingsIn), Arg \= Arg2)),
 not(( member(binding(Arg1, Arg2), BindingsIn))),
 % dodaj nowy binding
-append(BindingsIn, binding(Arg1, Arg2), BindingsOut).
+append([binding(Arg1, Arg2)],BindingsIn, BindingsOut).
 
 
 
