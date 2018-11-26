@@ -67,7 +67,6 @@ RetLastUsed = LastLocal.
 
 %dodaj u¿yt¹ wczeœniej zmienn¹
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
-print("dodaj u¿yt¹ wczeœniej zmienn¹"),
 variables(Vars),
 X is LastLocal+1,
 random(0,X,Rand),
@@ -77,7 +76,6 @@ Rand =< LastUsed -> FlagOut = true.
 
 %dodaj now¹ zmienn¹
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
-print("dodaj now¹ zmienn¹"),
 variables(Vars),
 X is LastLocal+1,
 nth0(X,Vars,Arg),
@@ -86,7 +84,6 @@ FlagOut = FlagIn.
 
 %pobiera od u¿ytkownika
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
-print("pobiera od u¿ytkownika"),
 variables(Vars),
 length(Vars, VarsLen),
 LastLocal>=VarsLen+1,
