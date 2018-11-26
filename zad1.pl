@@ -67,13 +67,6 @@ build_arg_list(M, vars(LastUsed, RetLastLocal), FlagOut, Args, RetLastUsed),
 ArgList = [Arg|Args],
 RetLastUsed = LastLocal.
 
-test(0, List):-
-List = [a].
-test(N, List):-
-M is N-1,
-test(M, List),
-List = [a|List].
-
 %dodaj u¿yt¹ wczeœniej zmienn¹
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
 print("dodaj u¿yt¹ wczeœniej zmienn¹"),
