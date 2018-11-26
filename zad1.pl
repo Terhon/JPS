@@ -44,6 +44,21 @@ predicate(Pred, N),
 build_arg_list(N, vars(LastUsed, LastUsed), false, ArgList, RetLastUsed),
 Expr =.. [Pred|ArgList] .
 
+build_arg_list(0, vars(LastUsed, LastLocal), false, ArgList, RetLastUsed) :-
+nl.
+
+build_arg_list(0, vars(LastUsed, LastLocal), true, ArgList, RetLastUsed) :-
+nl.
+
+build_arg_list(N, vars(LastUsed, LastLocal), Flag, ArgList, RetLastUsed) :-
+build_arg_list(N-1, vars(LastUsed, LastLocal), LastUsed \= LastLocal, ArgList, RetLastUsed).
+
+insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
+nl.
+
+insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
+nl.
+
 filter( Examples, Rule, Examples1) :-
 findall( Example,
 (member1(Example, Examples), covers(Rule, Example)),
@@ -72,59 +87,14 @@ Expr =.. [_|ArgList1],
 Fact =.. [_|ArgList2],
 match_arg_lists(ArgList1,ArgList2,BindingsIn,BindingsOut) .
 
-% rule(P, [Q1, Q2, ... Qn]) - budowana regu³a
-% variables ( <lista symboli>) - zmienne wyra¿eñ predykatowych Qx
-
-% ostatni krok rekurencji - nie ma argumentów do z³¹czenia, zwróæ listê
-% wejœciow¹
 match_arg_lists([], [], BindingsIn, BindingsOut) :-
 BindingsOut = BindingsIn.
 
-%zwróæ w BindingsOut listê zwi¹zañ binding(zmienna, wartoœæ)
-%Arg1|RestList1 - lista zmiennych jakiegoœ Qx, np. Q1(X, Y)
-%Arg2|RestList2 - lista wartoœci z jakiegoœ faktu, np.
-%brat(Alfred, Alojzy)
-%spróbuj stworzyæ listê [binding(X, Alfred), binding(Y, Alojzy)]
 match_arg_lists([Arg1|RestList1],[Arg2|RestList2], BindingsIn, BindingsOut) :-
-%spróbuj po³¹czyæ pierwsz¹ zmienn¹ i pierwsz¹ wartoœæ
 match_args(Arg1, Arg2, BindingsIn, BindingsOut1),
-%wykonaj procedurê dla reszty listy
 match_arg_lists(RestList1, RestList2, BindingsOut1, BindingsOut).
 
-% Sprawdza dopasowanie pary argumentów
-% --
-% zmiennej z wyra¿enia predykatowego z poprzednika regu³y i
-% symbolu z faktu operacyjnego. W przypadku powodzenia jako wynik zwraca
-% uzupe³nion¹ listê zwi¹zañ zmiennych.
-% Arg1 - zmienna wyra¿enia Qx, np. Q1(X, Y)
-% Arg2 - symbol faktu operacyjnego - wartoœæ wziêta z faktu, np. wartoœæ
-% 'Alfred' wziêta z faktu brat(Alfred, Alojzy)
-% procedura próbuje zostawiæ w BindingsOut po³¹czenie BindingsIn z
-% binding(X, 'Alfred')
-
 match_args(Arg1, Arg2, BindingsIn, BindingsOut) :-
-% sprawdŸ, czy w BindingsIn wartosc Alfrednie jest po³¹czone z innym
-% symbolem, ni¿ X i dane przypisanie juz nie istnieje
 not(( member(binding(Arg1, Arg), BindingsIn), Arg \= Arg2)),
 not(( member(binding(Arg1, Arg2), BindingsIn))),
-% dodaj nowy binding
 append([binding(Arg1, Arg2)],BindingsIn, BindingsOut).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
