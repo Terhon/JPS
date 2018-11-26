@@ -44,33 +44,38 @@ predicate(Pred, N),
 build_arg_list(N, vars(LastUsed, LastUsed), false, ArgList, RetLastUsed),
 Expr =.. [Pred|ArgList] .
 
+%argument niespe³niony - dodaj wczeœniej u¿yt¹ zmienn¹
 build_arg_list(0, vars(LastUsed, LastLocal), false, ArgList, RetLastUsed) :-
 variables(Vars),
 X is LastUsed+1,
 random(0,X,Rand),
-nth0(Rand,Vars,ArgList).
+nth0(Rand,Vars,ArgList),
+RetLastUsed = LastLocal.
 
-build_arg_list(0, vars(LastUsed, LastLocal), true, [Arg], RetLastUsed) :-
-insert_arg(LastUsed, LastLocal, Flag, Arg, X, FlagOut).
+%warunek spe³niony - dodaj argument normalnie
+build_arg_list(0, vars(LastUsed, LastLocal), true, ArgList, RetLastUsed) :-
+insert_arg(LastUsed, LastLocal, Flag, ArgList, RetLastUsed, FlagOut).
 
 build_arg_list(N, vars(LastUsed, LastLocal), Flag, ArgList, RetLastUsed) :-
-insert_arg(LastUsed, LastLocal, Flag, Arg, X, FlagOut),
-build_arg_list(N-1, vars(Y,Z), FlagOut, ArgList,W),
-ArgList = [Arg|ArgList].
+insert_arg(LastUsed, LastLocal, Flag, Arg, RetLastUsed1, FlagOut),
+M is N-1,
+build_arg_list(M, vars(LastUsed,Z), FlagOut, ArgList,W),
+ArgList = [Arg|ArgList],
+RetLastUsed = LastLocal.
 
 %dodaj u¿yt¹ wczeœniej zmienn¹
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
 variables(Vars),
-X is LastUsed+1,
+X is LastLocal+1,
 random(0,X,Rand),
 nth0(Rand,Vars,Arg),
-RetLastLocal = LastUsed,
-FlagOut = true.
+RetLastLocal = LastLocal,
+FlagOut = (LastUsed).
 
 %dodaj now¹ zmienn¹
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
 variables(Vars),
-X is LastUsed+1,
+X is LastLocal+1,
 nth0(X,Vars,Arg),
 RetLastLocal = X,
 FlagOut = FlagIn.
