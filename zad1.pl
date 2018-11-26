@@ -59,10 +59,10 @@ build_arg_list(1, vars(LastUsed, LastLocal), true, ArgList, RetLastUsed) :-
 insert_arg(LastUsed, LastLocal, true, ArgList, RetLastUsed, FlagOut).
 
 build_arg_list(N, vars(LastUsed, LastLocal), Flag, ArgList, RetLastUsed) :-
-insert_arg(LastUsed, LastLocal, Flag, Arg, RetLastUsed1, FlagOut),
+insert_arg(LastUsed, LastLocal, Flag, Arg, RetLastLocal, FlagOut),
 M is N-1,
-build_arg_list(M, vars(LastUsed,Z), FlagOut, ArgList,W),
 ArgList = [Arg|ArgList],
+build_arg_list(M, vars(LastUsed, RetLastLocal), FlagOut, ArgList, RetLastUsed),
 RetLastUsed = LastLocal.
 
 %dodaj u¿yt¹ wczeœniej zmienn¹
