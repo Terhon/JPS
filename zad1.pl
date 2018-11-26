@@ -70,10 +70,11 @@ insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
 print("dodaj u¿yt¹ wczeœniej zmienn¹"),
 variables(Vars),
 X is LastLocal+1,
+nth0(X,Vars,_),
 random(0,X,Rand),
 nth0(Rand,Vars,Arg),
 RetLastLocal = X,
-Rand =< LastUsed -> FlagOut = true ; FlagOut = FlagIn.
+(Rand =< LastUsed -> FlagOut = true ; FlagOut = FlagIn).
 
 %dodaj now¹ zmienn¹
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
