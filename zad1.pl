@@ -52,13 +52,13 @@ variables(Vars),
 X is LastUsed+1,
 random(0,X,Rand),
 nth0(Rand,Vars,Arg),
-ArgList = [Arg|ArgList],
+ArgList = [Arg],
 RetLastUsed = LastLocal.
 
 %warunek spe³niony - dodaj argument normalnie
 build_arg_list(1, vars(LastUsed, LastLocal), true, ArgList, RetLastUsed) :-
 insert_arg(LastUsed, LastLocal, true, Arg, RetLastUsed, FlagOut),
-ArgList = [Arg|ArgList].
+ArgList = [Arg].
 
 build_arg_list(N, vars(LastUsed, LastLocal), Flag, ArgList, RetLastUsed) :-
 insert_arg(LastUsed, LastLocal, Flag, Arg, RetLastLocal, FlagOut),
