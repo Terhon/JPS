@@ -47,16 +47,18 @@ Expr =.. [Pred|ArgList] .
 build_arg_list(0, vars(LastUsed, LastLocal), false, ArgList, RetLastUsed) :-
 nl.
 
-build_arg_list(0, vars(LastUsed, LastLocal), true, ArgList, RetLastUsed) :-
-nl.
+build_arg_list(0, vars(LastUsed, LastLocal), true, [Arg], RetLastUsed) :-
+insert_arg(LastUsed, LastLocal, Flag, Arg, X, FlagOut).
 
 build_arg_list(N, vars(LastUsed, LastLocal), Flag, ArgList, RetLastUsed) :-
-build_arg_list(N-1, vars(LastUsed, LastLocal), LastUsed \= LastLocal, ArgList, RetLastUsed).
+insert_arg(LastUsed, LastLocal, Flag, Arg, X, FlagOut),
+build_arg_list(N-1, vars(Y,Z), FlagOut, [Arg|ArgList],W).
 
 %dodaj u¿yt¹ wczeœniej zmienn¹
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
 variables(Vars),
-random(0,LastUsed+1,Rand),
+X is LastUsed+1,
+random(0,X,Rand),
 nth0(Rand,Vars,Arg),
 RetLastLocal = LastUsed,
 FlagOut = true.
@@ -64,8 +66,9 @@ FlagOut = true.
 %dodaj now¹ zmienn¹
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
 variables(Vars),
-nth0(LastLocal+1,Vars,Arg),
-RetLastLocal = LastLocal+1,
+X is LastUsed+1,
+nth0(X,Vars,Arg),
+RetLastLocal = X,
 FlagOut = FlagIn.
 
 filter( Examples, Rule, Examples1) :-
