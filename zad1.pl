@@ -73,7 +73,7 @@ X is LastLocal+1,
 nth0(X,Vars,_),
 random(0,X,Rand),
 nth0(Rand,Vars,Arg),
-RetLastLocal = X,
+RetLastLocal = LastLocal,
 (Rand =< LastUsed -> FlagOut = true ; FlagOut = FlagIn).
 
 %dodaj now¹ zmienn¹
