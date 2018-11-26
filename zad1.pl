@@ -48,6 +48,7 @@ Expr =.. [Pred|ArgList] .
 
 %argument niespe³niony - dodaj wczeœniej u¿yt¹ zmienn¹
 build_arg_list(1, vars(LastUsed, LastLocal), false, ArgList, RetLastUsed) :-
+print("warunek nie spelniony"),
 variables(Vars),
 X is LastUsed+1,
 random(0,X,Rand),
@@ -57,6 +58,7 @@ RetLastUsed = LastLocal.
 
 %warunek spe³niony - dodaj argument normalnie
 build_arg_list(1, vars(LastUsed, LastLocal), true, ArgList, RetLastUsed) :-
+print("warunek spelniony"),
 insert_arg(LastUsed, LastLocal, true, Arg, RetLastUsed, FlagOut),
 ArgList = [Arg].
 
@@ -90,9 +92,9 @@ FlagOut = FlagIn.
 %pobiera od u¿ytkownika
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
 print("pobiera od u¿ytkownika"),
-variables(Vars),
-length(Vars, VarsLen),
-LastLocal>=VarsLen+1,
+variables(Vars),print(1),
+length(Vars, VarsLen),print(LastLocal),print(VarsLen),
+LastLocal+1>=VarsLen,print(3),
 read(Arg),
 FlagOut=FlagIn,
 RetLastLocal is LastLocal+1.
