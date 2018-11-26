@@ -45,14 +45,18 @@ build_arg_list(N, vars(LastUsed, LastUsed), false, ArgList, RetLastUsed),
 Expr =.. [Pred|ArgList] .
 
 build_arg_list(0, vars(LastUsed, LastLocal), false, ArgList, RetLastUsed) :-
-nl.
+variables(Vars),
+X is LastUsed+1,
+random(0,X,Rand),
+nth0(Rand,Vars,ArgList).
 
 build_arg_list(0, vars(LastUsed, LastLocal), true, [Arg], RetLastUsed) :-
 insert_arg(LastUsed, LastLocal, Flag, Arg, X, FlagOut).
 
 build_arg_list(N, vars(LastUsed, LastLocal), Flag, ArgList, RetLastUsed) :-
 insert_arg(LastUsed, LastLocal, Flag, Arg, X, FlagOut),
-build_arg_list(N-1, vars(Y,Z), FlagOut, [Arg|ArgList],W).
+build_arg_list(N-1, vars(Y,Z), FlagOut, ArgList,W),
+ArgList = [Arg|ArgList].
 
 %dodaj u¿yt¹ wczeœniej zmienn¹
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
