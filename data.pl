@@ -1,4 +1,4 @@
-variables(a,b,c,d,e,f).
+variables([a,b,c,d,e,f]).
 
 known_fact(matka(M,A)).
 known_fact(brat(A,B)).
