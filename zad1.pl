@@ -73,7 +73,7 @@ X is LastLocal+1,
 random(0,X,Rand),
 nth0(Rand,Vars,Arg),
 RetLastLocal = X,
-Rand =< LastUsed -> FlagOut = true.
+Rand =< LastUsed -> FlagOut = true ; FlagOut = FlagIn.
 
 %dodaj now¹ zmienn¹
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
