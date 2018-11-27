@@ -47,7 +47,8 @@ build_arg_list(N, vars(LastUsed, LastUsed), false, ArgList, RetLastUsed),
 Expr =.. [Pred|ArgList] .
 
 %argument niespe³niony - dodaj wczeœniej u¿yt¹ zmienn¹
-build_arg_list(1, vars(LastUsed, LastLocal), false, ArgList, RetLastUsed) :-
+build_arg_list(1, vars(LastUsed, LastLocal), FlagOut, ArgList, RetLastUsed) :-
+FlagOut==false,
 print("warunek nie spelniony"),
 variables(Vars),
 X is LastUsed+1,
@@ -57,17 +58,20 @@ ArgList = [Arg],
 RetLastUsed = LastLocal.
 
 %warunek spe³niony - dodaj argument normalnie
-build_arg_list(1, vars(LastUsed, LastLocal), true, ArgList, RetLastUsed) :-
+build_arg_list(1, vars(LastUsed, LastLocal), FlagOut, ArgList, RetLastUsed) :-
+FlagOut==true,
 print("warunek spelniony"),
-insert_arg(LastUsed, LastLocal, true, Arg, RetLastUsed, FlagOut),
-ArgList = [Arg].
+insert_arg(LastUsed, LastLocal, true, Arg, RetLastUsed, FlagOut),print(7),
+ArgList = [Arg],print(8).
 
 build_arg_list(N, vars(LastUsed, LastLocal), Flag, ArgList, RetLastUsed) :-
+print(N),nl,
 insert_arg(LastUsed, LastLocal, Flag, Arg, RetLastLocal, FlagOut),
-M is N-1,
-build_arg_list(M, vars(LastUsed, RetLastLocal), FlagOut, Args, RetLastUsed),
-ArgList = [Arg|Args],
-RetLastUsed = LastLocal.
+M is N-1,nl,print(M),nl,print(FlagOut),nl,
+build_arg_list(M, vars(LastUsed, RetLastLocal), FlagOut, Args, RetLastUsed1),
+print(aca),
+ArgList = [Arg|Args],print(bcb),
+RetLastUsed = RetLastUsed1,print(cdc).
 
 %dodaj u¿yt¹ wczeœniej zmienn¹
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
@@ -94,10 +98,10 @@ insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
 print("pobiera od u¿ytkownika"),
 variables(Vars),print(1),
 length(Vars, VarsLen),print(LastLocal),print(VarsLen),
-LastLocal+1>=VarsLen,print(3),
-read(Arg),
-FlagOut=FlagIn,
-RetLastLocal is LastLocal+1.
+LastLocal>=VarsLen,print(3),
+read(Arg),print(4),
+FlagOut=FlagIn,print(5),
+RetLastLocal is LastLocal+1,print(6),nl.
 
 filter( Examples, Rule, Examples1) :-
 findall( Example,
