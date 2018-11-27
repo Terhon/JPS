@@ -120,9 +120,14 @@ match_arg_lists([Arg1|RestList1],[Arg2|RestList2], BindingsIn, BindingsOut) :-
 match_args(Arg1, Arg2, BindingsIn, BindingsOut1),
 match_arg_lists(RestList1, RestList2, BindingsOut1, BindingsOut).
 
-% iteruj po BindingsIn, jak coœ Ÿle to wywal, jak jest ju¿ to true, jak
-% nie ma to dodaj
-match_args(Arg1, Arg2, BindingsIn, BindingsOut) :-
-not(( member(binding(Arg1, Arg), BindingsIn), Arg \= Arg2)),
-not(( member(binding(Arg1, Arg2), BindingsIn))),
-append([binding(Arg1, Arg2)],BindingsIn, BindingsOut).
+%nie ma powiazania, wiec dodaj
+match_args(Arg1, Arg2, [], [bind(Arg1,Arg2)]).
+
+%istnieje juz powiazanie
+match_args(Arg1, Arg2, [bind(Arg1,Arg2)|BindingsInRest], [bind(Arg1,Arg2)|BindingsInRest]).
+
+%jak nie ma sprzecznosci to idz dalej
+match_args(Arg1, Arg2, [bind(Arg3,Arg4)|BindingsInRest], [bind(Arg3,Arg4)|BindingsOut]) :-
+Arg1\=Arg3,
+Arg2\=Arg4,
+match_args(Arg1, Arg2, BindingsInRest, BindingsOut).
