@@ -47,35 +47,23 @@ build_arg_list(N, vars(LastUsed, LastUsed), false, ArgList, RetLastUsed),
 Expr =.. [Pred|ArgList] .
 
 %argument niespe³niony - dodaj wczeœniej u¿yt¹ zmienn¹
-build_arg_list(1, vars(LastUsed, LastLocal), FlagOut, ArgList, RetLastUsed) :-
-FlagOut==false,
-print("warunek nie spelniony"),
+build_arg_list(1, vars(LastUsed, LastLocal), false, [Arg], LastLocal) :-
 variables(Vars),
 X is LastUsed+1,
 random(0,X,Rand),
-nth0(Rand,Vars,Arg),
-ArgList = [Arg],
-RetLastUsed = LastLocal.
+nth0(Rand,Vars,Arg).
 
 %warunek spe³niony - dodaj argument normalnie
-build_arg_list(1, vars(LastUsed, LastLocal), FlagOut, ArgList, RetLastUsed) :-
-FlagOut==true,
-print("warunek spelniony"),
-insert_arg(LastUsed, LastLocal, true, Arg, RetLastUsed, FlagOut),print(7),
-ArgList = [Arg],print(8).
+build_arg_list(1, vars(LastUsed, LastLocal), true, [Arg], RetLastUsed) :-
+insert_arg(LastUsed, LastLocal, true, Arg, RetLastUsed, FlagOut).
 
-build_arg_list(N, vars(LastUsed, LastLocal), Flag, ArgList, RetLastUsed) :-
-print(N),nl,
+build_arg_list(N, vars(LastUsed, LastLocal), Flag, [Arg|Args], RetLastUsed) :-
 insert_arg(LastUsed, LastLocal, Flag, Arg, RetLastLocal, FlagOut),
-M is N-1,nl,print(M),nl,print(FlagOut),nl,
-build_arg_list(M, vars(LastUsed, RetLastLocal), FlagOut, Args, RetLastUsed1),
-print(aca),
-ArgList = [Arg|Args],print(bcb),
-RetLastUsed = RetLastUsed1,print(cdc).
+M is N-1,
+build_arg_list(M, vars(LastUsed, RetLastLocal), FlagOut, Args, RetLastUsed).
 
 %dodaj u¿yt¹ wczeœniej zmienn¹
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
-print("dodaj u¿yt¹ wczeœniej zmienn¹"),
 variables(Vars),
 X is LastLocal+1,
 nth0(X,Vars,_),
@@ -85,23 +73,18 @@ RetLastLocal = LastLocal,
 (Rand =< LastUsed -> FlagOut = true ; FlagOut = FlagIn).
 
 %dodaj now¹ zmienn¹
-insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
-print("dodaj now¹ zmienn¹"),
+insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagIn) :-
 variables(Vars),
-X is LastLocal+1,
-nth0(X,Vars,Arg),
-RetLastLocal = X,
-FlagOut = FlagIn.
+RetLastLocal is LastLocal+1,
+nth0(RetLastLocal,Vars,Arg).
 
-%pobiera od u¿ytkownika
-insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
-print("pobiera od u¿ytkownika"),
-variables(Vars),print(1),
-length(Vars, VarsLen),print(LastLocal),print(VarsLen),
-LastLocal>=VarsLen,print(3),
-read(Arg),print(4),
-FlagOut=FlagIn,print(5),
-RetLastLocal is LastLocal+1,print(6),nl.
+%pobiera od u¿ytkownika i dodaje do Vars
+insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagIn) :-
+variables(Vars),
+length(Vars, VarsLen),
+LastLocal>=VarsLen,
+read(Arg),
+RetLastLocal is LastLocal+1.
 
 filter( Examples, Rule, Examples1) :-
 findall( Example,
@@ -131,13 +114,14 @@ Expr =.. [_|ArgList1],
 Fact =.. [_|ArgList2],
 match_arg_lists(ArgList1,ArgList2,BindingsIn,BindingsOut) .
 
-match_arg_lists([], [], BindingsIn, BindingsOut) :-
-BindingsOut = BindingsIn.
+match_arg_lists([], [], BindingsIn, BindingsIn).
 
 match_arg_lists([Arg1|RestList1],[Arg2|RestList2], BindingsIn, BindingsOut) :-
 match_args(Arg1, Arg2, BindingsIn, BindingsOut1),
 match_arg_lists(RestList1, RestList2, BindingsOut1, BindingsOut).
 
+% iteruj po BindingsIn, jak coœ Ÿle to wywal, jak jest ju¿ to true, jak
+% nie ma to dodaj
 match_args(Arg1, Arg2, BindingsIn, BindingsOut) :-
 not(( member(binding(Arg1, Arg), BindingsIn), Arg \= Arg2)),
 not(( member(binding(Arg1, Arg2), BindingsIn))),
