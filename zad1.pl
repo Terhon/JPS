@@ -47,11 +47,8 @@ build_arg_list(N, vars(LastUsed, LastUsed), false, ArgList, RetLastUsed),
 Expr =.. [Pred|ArgList] .
 
 %argument niespe³niony - dodaj wczeœniej u¿yt¹ zmienn¹
-build_arg_list(1, vars(LastUsed, LastLocal), false, [Arg], LastLocal) :-
-variables(Vars),
-X is LastUsed+1,
-random(0,X,Rand),
-nth0(Rand,Vars,Arg).
+build_arg_list(1, vars(LastUsed, LastLocal), false, [Arg], LastLocal) :-print(1),nl,
+insert_arg(LastUsed, LastLocal, false, Arg, LastLocal, true).
 
 %warunek spe³niony - dodaj argument normalnie
 build_arg_list(1, vars(LastUsed, LastLocal), true, [Arg], RetLastUsed) :-
@@ -62,29 +59,39 @@ insert_arg(LastUsed, LastLocal, Flag, Arg, RetLastLocal, FlagOut),
 M is N-1,
 build_arg_list(M, vars(LastUsed, RetLastLocal), FlagOut, Args, RetLastUsed).
 
-%dodaj u¿yt¹ wczeœniej zmienn¹
-insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagOut) :-
+%dodaj zmienn¹ u¿yt¹ we wczeœniejszych wyra¿eniach
+insert_arg(LastUsed, LastLocal, FlagIn, Arg, LastLocal, true) :-
 variables(Vars),
-X is LastLocal+1,
-nth0(X,Vars,_),
+X is LastUsed+1,
 random(0,X,Rand),
-nth0(Rand,Vars,Arg),
-RetLastLocal = LastLocal,
-(Rand =< LastUsed -> FlagOut = true ; FlagOut = FlagIn).
+nth0(Rand,Vars,Arg).
 
-%dodaj now¹ zmienn¹
-insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagIn) :-
+%dodaj zmienn¹ u¿yt¹ wczeœniej w tym wyra¿eniu
+insert_arg(LastUsed, LastLocal, FlagIn, Arg, LastLocal, FlagIn) :-
+LastUsed\=LastLocal,
 variables(Vars),
-RetLastLocal is LastLocal+1,
-nth0(RetLastLocal,Vars,Arg).
+AfterLastLocal is LastLocal+1,
+AfterLastUsed is LastUsed+1,
+random(AfterLastUsed,AfterLastLocal,Rand),
+nth0(Rand,Vars,Arg).
 
-%pobiera od u¿ytkownika i dodaje do Vars
-insert_arg(LastUsed, LastLocal, FlagIn, Arg, RetLastLocal, FlagIn) :-
+%dodaje now¹ zmienn¹
+insert_arg(LastUsed, LastLocal, FlagIn, Arg, NewLastLocal, FlagIn) :-
 variables(Vars),
-length(Vars, VarsLen),
-LastLocal>=VarsLen,
+NewLastLocal is LastLocal+1,
+nth0(NewLastLocal,Vars,Arg).
+
+%pobierz now¹ zmienn¹ od u¿ytkownika
+insert_arg(LastUsed, LastLocal, FlagIn, Arg, LastLocal, FlagIn) :-
+retract(variables(Vars)),
 read(Arg),
-RetLastLocal is LastLocal+1.
+append_tail(Arg, Vars, NewVars),
+assert(variables(NewVars)).
+
+append_tail(X, [], [X]).
+
+append_tail(X, [A|Y], [A|Z]) :-
+append_tail(X, Y, Z).
 
 filter( Examples, Rule, Examples1) :-
 findall( Example,
