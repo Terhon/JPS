@@ -1,5 +1,3 @@
-variables([a,b,c,d,e,f]).
-
 learn_rules( [ ] , _ , _ , _ , [ ] ) .
 learn_rules(PosExamples, NegExamples, Conseq, VarsIndex, [Rule | RestRules]) :-
 learn_one_rule( PosExamples, NegExamples,
@@ -77,12 +75,16 @@ nth0(Rand,Vars,Arg).
 
 %dodaje now¹ zmienn¹
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, NewLastLocal, FlagIn) :-
-variables(Vars),
 NewLastLocal is LastLocal+1,
-nth0(NewLastLocal,Vars,Arg).
+get_var(NewLastLocal, Arg).
+
+%pobierz now¹ zmienn¹ z tablicy
+get_var(Pos, Arg):-
+variables(Vars),
+nth0(Pos,Vars,Arg).
 
 %pobierz now¹ zmienn¹ od u¿ytkownika
-insert_arg(LastUsed, LastLocal, FlagIn, Arg, LastLocal, FlagIn) :-
+get_var(_, Arg):-
 retract(variables(Vars)),
 read(Arg),
 append_tail(Arg, Vars, NewVars),
