@@ -79,12 +79,12 @@ NewLastLocal is LastLocal+1,
 get_var(NewLastLocal, Arg).
 
 %pobierz now¹ zmienn¹ z tablicy
-get_var(Pos, Arg):-
+get_var(Pos, Arg) :-
 variables(Vars),
 nth0(Pos,Vars,Arg).
 
 %pobierz now¹ zmienn¹ od u¿ytkownika
-get_var(_, Arg):-
+get_var(_, Arg) :-
 retract(variables(Vars)),
 read(Arg),
 append_tail(Arg, Vars, NewVars),
