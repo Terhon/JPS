@@ -44,47 +44,55 @@ predicate(Pred, N),
 build_arg_list(N, vars(LastUsed, LastUsed), false, ArgList, RetLastUsed),
 Expr =.. [Pred|ArgList] .
 
-%argument niespe³niony - dodaj wczeœniej u¿yt¹ zmienn¹
-build_arg_list(1, vars(LastUsed, LastLocal), false, [Arg], LastLocal) :-print(1),nl,
+%argument niespeï¿½niony - dodaj wczeï¿½niej uï¿½ytï¿½ zmiennï¿½
+build_arg_list(1, vars(LastUsed, LastLocal), false, [Arg], LastLocal) :-
 insert_arg(LastUsed, LastLocal, false, Arg, LastLocal, true).
 
-%warunek spe³niony - dodaj argument normalnie
+%warunek speï¿½niony - dodaj argument normalnie
 build_arg_list(1, vars(LastUsed, LastLocal), true, [Arg], RetLastUsed) :-
 insert_arg(LastUsed, LastLocal, true, Arg, RetLastUsed, FlagOut).
 
 build_arg_list(N, vars(LastUsed, LastLocal), Flag, [Arg|Args], RetLastUsed) :-
+N>=1,
 insert_arg(LastUsed, LastLocal, Flag, Arg, RetLastLocal, FlagOut),
 M is N-1,
 build_arg_list(M, vars(LastUsed, RetLastLocal), FlagOut, Args, RetLastUsed).
 
-%dodaj zmienn¹ u¿yt¹ we wczeœniejszych wyra¿eniach
+%dodaj zmiennï¿½ uï¿½ytï¿½ we wczeï¿½niejszych wyraï¿½eniach
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, LastLocal, true) :-
 variables(Vars),
-X is LastUsed+1,
-random(0,X,Rand),
-nth0(Rand,Vars,Arg).
+gen(0,LastUsed,Gen),
+nth0(Gen,Vars,Arg).
 
-%dodaj zmienn¹ u¿yt¹ wczeœniej w tym wyra¿eniu
+%dodaj zmiennï¿½ uï¿½ytï¿½ wczeï¿½niej w tym wyraï¿½eniu
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, LastLocal, FlagIn) :-
 LastUsed\=LastLocal,
 variables(Vars),
-AfterLastLocal is LastLocal+1,
 AfterLastUsed is LastUsed+1,
-random(AfterLastUsed,AfterLastLocal,Rand),
-nth0(Rand,Vars,Arg).
+gen(AfterLastUsed,LastLocal,Gen),
+nth0(Gen,Vars,Arg).
 
-%dodaje now¹ zmienn¹
+%dodaje nowï¿½ zmiennï¿½
 insert_arg(LastUsed, LastLocal, FlagIn, Arg, NewLastLocal, FlagIn) :-
 NewLastLocal is LastLocal+1,
 get_var(NewLastLocal, Arg).
 
-%pobierz now¹ zmienn¹ z tablicy
+gen(Min,Max,Min):-
+Min=<Max.
+
+gen(Min,Max,Result):-
+Min=<Max,
+X is Min+1,
+gen(X,Max,Result).
+
+%pobierz nowï¿½ zmiennï¿½ z tablicy
 get_var(Pos, Arg) :-
 variables(Vars),
-nth0(Pos,Vars,Arg).
+nth0(Pos,Vars,Arg),
+!.
 
-%pobierz now¹ zmienn¹ od u¿ytkownika
-get_var(_, Arg) :-
+%pobierz nowï¿½ zmiennï¿½ od uï¿½ytkownika
+get_var(Pos, Arg) :-
 retract(variables(Vars)),
 read(Arg),
 append_tail(Arg, Vars, NewVars),

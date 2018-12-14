@@ -1,4 +1,4 @@
-variables([a,b,c,d,e,f]).
+variables([a,b]).
 :- dynamic variables/1 .
 
 known_fact(matka(M,A)).
