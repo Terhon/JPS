@@ -59,10 +59,7 @@ build_expr(LastUsed, Expr, RetLastUsed),
 suitable(rule(Conseq, [Expr|Anteced]), NegExamples).
 
 suitable(rule(Conseq, Anteced),[NegExample|_]):-
-Conseq =.. [Func|_],
-NegExample =.. [neg|Args],
-Example =.. [Func|Args],
-not(covers(rule(Conseq, Anteced), Example)).
+not(covers(rule(Conseq, Anteced), NegExample)).
 
 suitable(Rule, [_|NegExamples]):-
 suitable(Rule, NegExamples).
@@ -137,8 +134,7 @@ remove([Example|Examples], Rule, Examples1) :-
 covers(Rule, Example), !,
 remove(Examples, Rule, Examples1).
 
-
-remove([_|Examples], Rule, [_|Examples1]) :-
+remove([Example|Examples], Rule, [Example|Examples1]) :-
 remove(Examples, Rule, Examples1).
 
 
