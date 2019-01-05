@@ -24,9 +24,9 @@ Rules),
 choose_best( Rules, BestRule, RetLastUsed).
 
 % ostatni krok ustala BestRule
-% tego nie czaje, dlaczego [rule/_] , a nie samo rule (ostatnia,
-% najlepsza regula)
-% / tworzy pare, tutaj jest para rule + cokolwiek
+% tego nie czaje, dlaczego [rule_descr/_] , a nie samo rule_descr
+% (ostatnia, najlepsza regula) / tworzy pare, 
+% tutaj jest para rule_descr + cokolwiek 
 % RetLastUsed to RetLastUsed najlepszej reguly
 choose_best([rule_descr(CandPartialRule, Score, RetLastUsed)/_],
             rule_descr(CandPartialRule, Score, RetLastUsed),
