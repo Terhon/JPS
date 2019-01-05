@@ -58,6 +58,15 @@ rule(Conseq, [Expr|Anteced]), RetLastUsed) :-
 build_expr(LastUsed, Expr, RetLastUsed),
 suitable(rule(Conseq, [Expr|Anteced]), NegExamples).
 
+suitable(rule(Conseq, Anteced),[NegExample|_]):-
+Conseq =.. [Func|_],
+NegExample =.. [neg|Args],
+Example =.. [Func|Args],
+not(covers(rule(Conseq, Anteced), Example)).
+
+suitable(Rule, [_|NegExamples]):-
+suitable(Rule, NegExamples).
+
 build_expr(LastUsed,Expr,RetLastUsed) :-
 predicate(Pred, N),
 build_arg_list(N, vars(LastUsed, LastUsed), false, ArgList, RetLastUsed),
@@ -135,7 +144,7 @@ remove(Examples, Rule, Examples1).
 
 filter( Examples, Rule, Examples1) :-
 findall( Example,
-(member1(Example, Examples), covers(Rule, Example)),
+(member(Example, Examples), covers(Rule, Example)),
 Examples1).
 
 covers(rule(Conseq, Anteced), Example) :-
