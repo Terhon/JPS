@@ -64,6 +64,24 @@ not(covers(rule(Conseq, Anteced), NegExample)).
 suitable(Rule, [_|NegExamples]):-
 suitable(Rule, NegExamples).
 
+
+%forall(known_fact(Pred), ....?)
+
+create_obj_list(Pred, InObjList, OutObjList) :-
+%?- foo(hello, X) =.. List.
+%List = [foo, hello, X]
+
+%?- Term =.. [baz, foo(1)].
+%Term = baz(foo(1))
+
+Pred =.. [_ | Objs],
+conc(Objs, InObjList, OutObjList).
+
+
+conc([ ], L2 , L2 ).
+conc([X1|R1 ], L2, [X1|RN ]) :-
+conc(R1, L2, RN).
+
 build_expr(LastUsed,Expr,RetLastUsed) :-
 predicate(Pred, N),
 build_arg_list(N, vars(LastUsed, LastUsed), false, ArgList, RetLastUsed),
