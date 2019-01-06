@@ -64,18 +64,19 @@ not(covers(rule(Conseq, Anteced), NegExample)).
 suitable(Rule, [_|NegExamples]):-
 suitable(Rule, NegExamples).
 
+create_obj_list(ObjList) :-
+       findall(Objs,
+              (  known_fact(Pred),
+                 Pred =.. [_ | Objs]
+              ),
+              OutObjList),
+       unfold_obj_list(OutObjList, [], ObjList).
 
-%forall(known_fact(Pred), ....?)
+unfold_obj_list([], List, List).
 
-create_obj_list(Pred, InObjList, OutObjList) :-
-%?- foo(hello, X) =.. List.
-%List = [foo, hello, X]
-
-%?- Term =.. [baz, foo(1)].
-%Term = baz(foo(1))
-
-Pred =.. [_ | Objs],
-conc(Objs, InObjList, OutObjList).
+unfold_obj_list([FirstList | RestListOfLists], List, NewList) :-
+conc(FirstList, List, NewList1),
+unfold_obj_list(RestListOfLists, NewList1, NewList).
 
 
 conc([ ], L2 , L2 ).
