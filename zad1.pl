@@ -1,3 +1,20 @@
+learn(Class):-
+nl.
+
+generate_examples(L1, PosExamples, NegExamples):-print(1),
+generate_examples(L1, L1, L1, PosExamples, NegExamples).
+
+generate_examples(_,[],_,_,_):-print(2).
+
+generate_examples([],[_|L2],LM, PosExamples, NegExamples):-print(3),
+generate_examples(LM,L2,LM,PosExamples,NegExamples).
+
+generate_examples([E1|L1],[E2|L2],LM,PosExamples,NegExamples):-print(E1),print(E2),
+known_fact(F),F=..[_|[E1|E2]],print(5),
+generate_examples(L1,[E2|L2],LM,[[E1|E2]|PosExamples],NegExamples);print([E1|E2]),
+generate_examples(L1,[E2|L2],LM,PosExamples,[Elem|NegExamples]).
+
+
 learn_rules( [ ] , _ , _ , _ , [ ] ) .
 learn_rules(PosExamples, NegExamples, Conseq, VarsIndex, [Rule | RestRules]) :-
 learn_one_rule( PosExamples, NegExamples,
@@ -64,13 +81,14 @@ not(covers(rule(Conseq, Anteced), NegExample)).
 suitable(Rule, [_|NegExamples]):-
 suitable(Rule, NegExamples).
 
-create_obj_list(ObjList) :-
+create_obj_list(ObjSet) :-
        findall(Objs,
               (  known_fact(Pred),
                  Pred =.. [_ | Objs]
               ),
               OutObjList),
-       unfold_obj_list(OutObjList, [], ObjList).
+       unfold_obj_list(OutObjList, [], ObjList),
+       sort(ObjList,ObjSet).
 
 unfold_obj_list([], List, List).
 
