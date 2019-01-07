@@ -1,5 +1,11 @@
-learn(Class):-
-nl.
+learn(Conseq):-
+create_obj_list(L1),
+generate_examples(L1, PosExamples, NegExamples),
+learn_rules(PosExamples, NegExamples, Conseq, 0, Rules),
+nl, write(Conseq), write(' :- '), nl,
+writelist(Rules), nl.
+%assert(rule(Conseq,Rules)).
+
 
 generate_examples(L1, PosExamples, NegExamples):-
 generate_examples(L1, L1, L1, PosExamples, NegExamples).
@@ -223,3 +229,9 @@ match_args(Arg1, Arg2, [bind(Arg3,Arg4)|BindingsInRest], [bind(Arg3,Arg4)|Bindin
 Arg1\=Arg3,
 Arg2\=Arg4,
 match_args(Arg1, Arg2, BindingsInRest, BindingsOut).
+
+writelist( []).
+
+writelist( [X | L])  :-
+   tab( 2), write( X), nl,
+   writelist( L).
