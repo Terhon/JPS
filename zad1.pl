@@ -9,11 +9,13 @@ generate_examples(_,[],_,[],[]).
 generate_examples([],[_|L2],LM, PosExamples, NegExamples):-
 generate_examples(LM,L2,LM,PosExamples,NegExamples).
 
-generate_examples([E1|L1],[E2|L2],LM,[pos([E1|[E2|[]]])|PosExamples],NegExamples):-
+generate_examples([E1|L1],[E2|L2],LM,[Pos|PosExamples],NegExamples):-
 known_fact(F),F=..[_|[E1|[E2|[]]]],!,
+Pos=..[pos|[E1|[E2|[]]]],
 generate_examples(L1,[E2|L2],LM,PosExamples,NegExamples).
 
-generate_examples([E1|L1],[E2|L2],LM,PosExamples,[neg([E1|[E2|[]]])|NegExamples]):-
+generate_examples([E1|L1],[E2|L2],LM,PosExamples,[Neg|NegExamples]):-
+Neg=..[neg|[E1|[E2|[]]]],
 generate_examples(L1,[E2|L2],LM,PosExamples,NegExamples).
 
 learn_rules( [ ] , _ , _ , _ , [ ] ) .
