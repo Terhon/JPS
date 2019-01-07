@@ -12,7 +12,7 @@ generate_examples(LM,L2,LM,PosExamples,NegExamples).
 generate_examples([E1|L1],[E2|L2],LM,PosExamples,NegExamples):-print(E1),print(E2),
 known_fact(F),F=..[_|[E1|E2]],print(5),
 generate_examples(L1,[E2|L2],LM,[[E1|E2]|PosExamples],NegExamples);print([E1|E2]),
-generate_examples(L1,[E2|L2],LM,PosExamples,[Elem|NegExamples]).
+generate_examples(L1,[E2|L2],LM,PosExamples,[[E1|E2]|NegExamples]).
 
 
 learn_rules( [ ] , _ , _ , _ , [ ] ) .
