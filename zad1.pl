@@ -1,22 +1,25 @@
-learn(Class):-
-nl.
 
-generate_examples(L1, PosExamples, NegExamples):-
-generate_examples(L1, L1, L1, PosExamples, NegExamples).
+learn(Conseq, Rules):-
+create_obj_list(Objs),
+generate_examples(Objs, Pos, Neg),
+learn_rules(Pos,Neg,Conseq,0, Rules).
 
-generate_examples(_,[],_,[],[]).
+generate_examples(Conseq, L1, PosExamples, NegExamples):-
+generate_examples(Conseq, L1, L1, L1, PosExamples, NegExamples).
 
-generate_examples([],[_|L2],LM, PosExamples, NegExamples):-
-generate_examples(LM,L2,LM,PosExamples,NegExamples).
+generate_examples(_, _,[],_,[],[]).
 
-generate_examples([E1|L1],[E2|L2],LM,[Pos|PosExamples],NegExamples):-
-known_fact(F),F=..[_|[E1|[E2|[]]]],!,
+generate_examples(Conseq, [],[_|L2],LM, PosExamples, NegExamples):-
+generate_examples(Conseq, LM,L2,LM,PosExamples,NegExamples).
+
+generate_examples(Conseq, [E1|L1],[E2|L2],LM,[Pos|PosExamples],NegExamples):-
+known_fact(F),F=..[Conseq|[E1|[E2|[]]]],!,
 Pos=..[pos|[E1|[E2|[]]]],
-generate_examples(L1,[E2|L2],LM,PosExamples,NegExamples).
+generate_examples(Conseq, L1,[E2|L2],LM,PosExamples,NegExamples).
 
-generate_examples([E1|L1],[E2|L2],LM,PosExamples,[Neg|NegExamples]):-
+generate_examples(Conseq, [E1|L1],[E2|L2],LM,PosExamples,[Neg|NegExamples]):-
 Neg=..[neg|[E1|[E2|[]]]],
-generate_examples(L1,[E2|L2],LM,PosExamples,NegExamples).
+generate_examples(Conseq, L1,[E2|L2],LM,PosExamples,NegExamples).
 
 learn_rules( [ ] , _ , _ , _ , [ ] ) .
 learn_rules(PosExamples, NegExamples, Conseq, VarsIndex, [Rule | RestRules]) :-
