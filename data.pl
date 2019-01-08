@@ -1,14 +1,14 @@
 variables([a,b,c,d,e,f,g,h]).
 :- dynamic variables/1 .
 
-known_fact(matka(grazyna,seba)).
-known_fact(brat(seba,karyna)).
-known_fact(brat(karyna,seba)).
-known_fact(matka(grazyna,karyna)).
+known_fact(dziadek(aa,cccc)).
+known_fact(ojciec(aa,eee)).
+known_fact(ojciec(aa,bbb)).
+known_fact(ojciec(bbb,dddd)).
+known_fact(ojciec(bbb,ffff)).
 
-predicate(matka, 2).
-predicate(brat, 2).
-
+predicate(ojciec, 2).
+predicate(dziadek, 2).
 
 
 
