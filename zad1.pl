@@ -1,7 +1,14 @@
+learn(Conseq):-
+create_obj_list(L1),
+generate_examples(Conseq, L1, PosExamples, NegExamples),
+learn_rules(PosExamples, NegExamples, Conseq, 0, Rules),
+nl, write(Conseq), write(' :- '), nl,
+writelist(Rules), nl.
 
 learn(Conseq, Rules):-
+Conseq=..[F|_],
 create_obj_list(Objs),
-generate_examples(Objs, Pos, Neg),
+generate_examples(F, Objs, Pos, Neg),
 learn_rules(Pos,Neg,Conseq,0, Rules).
 
 generate_examples(Conseq, L1, PosExamples, NegExamples):-
@@ -32,9 +39,10 @@ learn_one_rule( _ , [ ] , Rule, _ , Rule).
 
 learn_one_rule( PosExamples, NegExamples, PartialRule, LastUsed, Rule ) :-
 new_partial_rule( PosExamples, NegExamples, PartialRule, LastUsed,
-NewPartialRule, NewLastUsed) ,
-filter( PosExamples, NewPartialRule, PosExamples1),
-filter( NegExamples, NewPartialRule, NegExamples1),
+NewPartialRule, NewLastUsed) ,print(PosExamples),nl,
+filter( PosExamples, NewPartialRule, PosExamples1),print(PosExamples1),nl,
+print(NewPartialRule),nl,print(NegExamples),nl,
+filter( NegExamples, NewPartialRule, NegExamples1),print(NegExamples1),nl,
 learn_one_rule( PosExamples1, NegExamples1, NewPartialRule,
 NewLastUsed, Rule ).
 
@@ -57,24 +65,26 @@ choose_best([rule_descr(CandPartialRule, Score, RetLastUsed)],
 % odrzuc gorszy, sprawdzaj dalej
 choose_best([rule_descr(CandPartialRule0, Score0, RetLastUsed0),
             rule_descr(CandPartialRule1, Score1, RetLastUsed1) | RestRules],
-            BestRule, _) :-
+            BestRule, X) :-
 Score1 > Score0, !,
 choose_best([rule_descr(CandPartialRule1, Score1, RetLastUsed1) | RestRules],
-            BestRule, _)
+            BestRule, X)
 ;
 choose_best([rule_descr(CandPartialRule0, Score0, RetLastUsed0) | RestRules],
-            BestRule, _).
+            BestRule, X).
 
 scored_rule( PosExamples, NegExamples, PartialRule, LastUsed,
 rule_descr(CandPartialRule, Score, RetLastUsed) ) :-
 candidate_rule(PartialRule, PosExamples, NegExamples, LastUsed,
 CandPartialRule, RetLastUsed) ,
+CandPartialRule = rule(Conseq,Anteced),
+[Conseq] \= Anteced,
 filter( PosExamples, CandPartialRule, PosExamples1),
 filter( NegExamples, CandPartialRule, NegExamples1),
 length( PosExamples1, NPos),
 length(NegExamples1, NNeg),
 NPos > 0,
-Score is NPos - NNeg.
+Score is NPos - NNeg,print(Score).
 
 candidate_rule(rule(Conseq, Anteced), PosExamples, NegExamples, LastUsed,
 rule(Conseq, [Expr|Anteced]), RetLastUsed) :-
@@ -181,7 +191,7 @@ remove([Example|Examples], Rule, [Example|Examples1]) :-
 remove(Examples, Rule, Examples1).
 
 
-filter( Examples, Rule, Examples1) :-
+filter( Examples, Rule, Examples1) :-nl,print(Examples),nl,print(Rule),nl,
 findall( Example,
 (member(Example, Examples), covers(Rule, Example)),
 Examples1).
