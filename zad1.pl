@@ -38,17 +38,17 @@ learn_rules(RestPosExamples, NegExamples, Conseq, VarsIndex, RestRules).
 learn_one_rule( _ , [ ] , Rule, _ , Rule).
 
 learn_one_rule( PosExamples, NegExamples, PartialRule, LastUsed, Rule ) :-
-new_partial_rule( PosExamples, NegExamples, PartialRule, LastUsed,
+new_partial_rule(PosExamples, NegExamples, PartialRule, LastUsed,
 NewPartialRule, NewLastUsed) ,
-filter( PosExamples, NewPartialRule, PosExamples1),print(1),nl,
-filter( NegExamples, NewPartialRule, NegExamples1),print(NegExamples1),nl,
+filter( PosExamples, NewPartialRule, PosExamples1),
+filter( NegExamples, NewPartialRule, NegExamples1),
 learn_one_rule( PosExamples1, NegExamples1, NewPartialRule,
 NewLastUsed, Rule ).
 
-new_partial_rule( PosExamples, NegExamples, PartialRule, LastUsed,
+new_partial_rule(PosExamples, NegExamples, PartialRule, LastUsed,
 BestRule, RetLastUsed) :-
 findall(NewRuleDescr,
-scored_rule( PosExamples, NegExamples, PartialRule,
+scored_rule(PosExamples, NegExamples, PartialRule,
 LastUsed, NewRuleDescr) ,
 Rules),
 choose_best( Rules, BestRule, RetLastUsed).
@@ -72,7 +72,7 @@ choose_best([rule_descr(CandPartialRule1, Score1, RetLastUsed1) | RestRules],
 choose_best([rule_descr(CandPartialRule0, Score0, RetLastUsed0) | RestRules],
             BestRule, X).
 
-scored_rule( PosExamples, NegExamples, PartialRule, LastUsed,
+scored_rule(PosExamples, NegExamples, PartialRule, LastUsed,
 rule_descr(CandPartialRule, Score, RetLastUsed) ) :-
 candidate_rule(PartialRule, PosExamples, NegExamples, LastUsed,
 CandPartialRule, RetLastUsed) ,
@@ -81,9 +81,9 @@ Conseq \= Anteced,
 filter( PosExamples, CandPartialRule, PosExamples1),
 filter( NegExamples, CandPartialRule, NegExamples1),
 length( PosExamples1, NPos),
-length(NegExamples1, NNeg),
+length( NegExamples1, NNeg),
 NPos > 0,
-Score is NPos - NNeg.
+Score is 2*NPos - NNeg.
 
 candidate_rule(rule(Conseq, Anteced), PosExamples, NegExamples, LastUsed,
 rule(Conseq, [Expr|Anteced]), RetLastUsed) :-
@@ -190,7 +190,7 @@ remove([Example|Examples], Rule, [Example|Examples1]) :-
 remove(Examples, Rule, Examples1).
 
 
-filter( Examples, Rule, Examples1) :-print(Examples),nl,print(Rule),nl,
+filter( Examples, Rule, Examples1) :-
 findall( Example,
 (member(Example, Examples), covers(Rule, Example)),
 Examples1).
