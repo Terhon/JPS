@@ -1,7 +1,7 @@
 learn(Conseq):-
 create_obj_list(L1),
 generate_examples(Conseq, L1, PosExamples, NegExamples),
-learn_rules(PosExamples, NegExamples, Conseq, 0, Rules),
+learn_rules(2,PosExamples, NegExamples, Conseq, 0, Rules),
 nl, write(Conseq), write(' :- '), nl,
 writelist(Rules), nl.
 
@@ -9,7 +9,7 @@ learn(Conseq, Rules):-
 Conseq=..[F|_],
 create_obj_list(Objs),
 generate_examples(F, Objs, Pos, Neg),
-learn_rules(Pos,Neg,Conseq,1, Rules).
+learn_rules(2,Pos,Neg,Conseq,1, Rules).
 
 generate_examples(Conseq, L1, PosExamples, NegExamples):-
 generate_examples(Conseq, L1, L1, L1, PosExamples, NegExamples).
@@ -28,12 +28,20 @@ generate_examples(Conseq, [E1|L1],[E2|L2],LM,PosExamples,[Neg|NegExamples]):-
 Neg=..[neg|[E1|[E2|[]]]],
 generate_examples(Conseq, L1,[E2|L2],LM,PosExamples,NegExamples).
 
-learn_rules( [ ] , _ , _ , _ , [ ] ) .
-learn_rules(PosExamples, NegExamples, Conseq, VarsIndex, [Rule | RestRules]) :-
+learn_rules(_, [ ] , _ , _ , _ , [ ] ) .
+learn_rules(MaxLen,PosExamples, NegExamples, Conseq, VarsIndex, [Rule | RestRules]) :-
 learn_one_rule( PosExamples, NegExamples,
 rule(Conseq, [ ]), VarsIndex, Rule ) ,
+Rule = rule(Conseq, Antec),
+length(Antec, X),
+X < MaxLen,
 remove( PosExamples, Rule, RestPosExamples),
-learn_rules(RestPosExamples, NegExamples, Conseq, VarsIndex, RestRules).
+learn_rules(MaxLen,RestPosExamples, NegExamples, Conseq, VarsIndex, RestRules).
+
+learn_rules(MaxLen,PosExamples, NegExamples, Conseq, VarsIndex, Rules) :-
+X = MaxLen + 1,
+learn_rules(X,PosExamples, NegExamples, Conseq, VarsIndex, Rules).
+
 
 learn_one_rule( _ , [ ] , Rule, _ , Rule).
 
