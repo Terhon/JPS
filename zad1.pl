@@ -41,6 +41,7 @@ learn_rules(MaxLen,RestPosExamples, NegExamples, Conseq, VarsIndex, RestRules).
 
 learn_rules(MaxLen,PosExamples, NegExamples, Conseq, VarsIndex, Rules) :-
 X = MaxLen + 1,
+X < 4,
 learn_rules(X,PosExamples, NegExamples, Conseq, VarsIndex, Rules).
 
 
